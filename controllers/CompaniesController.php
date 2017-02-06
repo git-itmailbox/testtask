@@ -86,12 +86,15 @@ class CompaniesController extends Controller
             return $this->redirect('index');
 
         $model = new Companies;
-        $model->attributes = $_POST;
-        if(!($model->validate()))
-        $model->quota *= pow(1024,4);
-        else $this->sendAjaxResponseError($model, $model->errors);
-        $model->save();
+       $model->attributes = $_POST;
+        if($model->validate())
+	{	
+	$model->save();
         return $this->sendAjaxResponse($model);
+//
+	}
+       
+        else return $this->sendAjaxResponseError($model, $model->errors);
 //
     }
     public function actionGetcompany()
