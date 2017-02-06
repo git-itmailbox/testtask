@@ -65,13 +65,10 @@ class CompaniesController extends Controller
     {
         $id = $_POST['id'];
         $model = Companies::findOne($id);
-
         $model->attributes = $_POST;
-	$model->quota *= pow(1024,4);
 	
        if($model->validate()){
- 		
-		        $model->save();
+ 	    $model->save();
 	}
 	else{
 	
