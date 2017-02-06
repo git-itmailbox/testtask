@@ -9,7 +9,7 @@ $faker = Faker\Factory::create();
 
 function dltButton($key){
 
-    return (Html::button("delete", ['data-id'=>$key,
+    return (Html::a("delete",'#' , ['data-id'=>$key,
         'class'=>'dltCompanyBtn btn btn-danger'
     ]));
 }
@@ -17,7 +17,7 @@ function dltButton($key){
 
 function editButton($key){
 
-    return (Html::button("edit", ['data-id'=>$key,
+    return (Html::a("edit", '#',['data-id'=>$key,
         'class'=>'editcompany btn btn-default',
         'data-toggle' => 'modal',
         'data-target' => '#myModal',
