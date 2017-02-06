@@ -55,8 +55,16 @@ class UsersController extends Controller
 
         $model = new Users;
         $model->attributes = $_POST;
-        $model->save();
+       if($model->validate()){
+		        $model->save();
+	}
+	else{
+	
+        return $this->sendAjaxResponseError($model,$model->errors);
+	
+	}
         return $this->sendAjaxResponse($model);
+
 //
     }
 
@@ -68,6 +76,14 @@ class UsersController extends Controller
         ]);
         Yii::$app->end();
     }
+
+ public function sendAjaxResponseError($model,$message)
+    {
+        header('Content-Type: application/json',true, 200);
+        echo json_encode(['data'=>$model->attributes, 'message'=>$message]);
+        Yii::$app->end();
+    }
+
 
     public function actionDelete()
     {
@@ -82,9 +98,15 @@ class UsersController extends Controller
     {
         $id = $_POST['id'];
         $model = Users::findOne($id);
-
         $model->attributes = $_POST;
-        $model->save();
+	if($model->validate()){
+		        $model->save();
+	}
+	else{
+	
+        return $this->sendAjaxResponseError($model,$model->errors);
+	
+	}
         return $this->sendAjaxResponse($model);
 
     }
