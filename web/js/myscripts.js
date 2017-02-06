@@ -103,7 +103,7 @@ function fillCompanyData(e) {
     var curRow = $(e).closest('tr');
     // var idCmp = $(curRow).data("id");
 
-console.log(e);
+	console.log(e);
     if (idCmp > 0) {
         isEdit.val(idCmp);
         $(".modal-title")[0].innerText = "Edit Company";
@@ -144,7 +144,8 @@ function editUser() {
             company_id: company.val(),
         },
         function (data) {
-            if (parseInt(idUser) == parseInt(data.data.id)) {
+	console.log(data);
+            if ((parseInt(idUser) == parseInt(data.data.id)) && data.message === undefined) {
                 //update view
                 console.log('User has been updated');
                 $(curRow).children()[0].innerHTML = data.data.name;
@@ -153,10 +154,22 @@ function editUser() {
                 $("#myModal").modal('hide');
 
             }
-            else console.log('smth wrong' + data.data.id);
+            else {
+
+		console.log('smth wrong' + data.data.id);
+		showError(data);
+		}
         },
         'json'
     );
+}
+
+function showError(data) {
+
+for(var key in data.message ){
+			alert(data.message[key][0]);
+			
+			}
 }
 
 function resetMyModal() {
@@ -182,8 +195,12 @@ function addUser() {
             company_id: company.val(),
         },
         function (data) {
+	if(data.message === undefined){
             $("#myModal").modal('hide');
             $.pjax.reload({container: '#pjaxupd'});
+	}else{
+ 	showError(data);
+	}
         }, "json"
     );
 }
@@ -222,13 +239,13 @@ function editCompany() {
             quota: quota.val(),
         },
         function (data) {
-            if (parseInt(idCompany) == parseInt(data.data.id)) {
+            if (parseInt(idCompany) == parseInt(data.data.id) && data.message === undefined) {
                 //update view
                 console.log('User has been updated');
                 $("#myModal").modal('hide');
                 $.pjax.reload({container: '#pjaxupd'})
             }
-            else console.log('smth wrong' + data.data.id);
+            else showError(data);
         },
         'json'
     );
@@ -260,4 +277,3 @@ function showReport() {
     });
 
 }
-
