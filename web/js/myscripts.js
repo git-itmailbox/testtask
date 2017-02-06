@@ -10,19 +10,19 @@ $(document).ready(function () {
             (parseInt(isEdit) > 0) ? editCompany() : addCompany();
         }
     );
-    $(".dltbtn").on("click", function () {
+    $(document).on("click",".dltbtn", function () {
         deleteUser(this);
         console.log('deleted');
 
     });
-    $(".dltCompanyBtn").on("click", function () {
+    $(document).on("click", ".dltCompanyBtn", function () {
         deleteCompany(this);
     });
-    $(".editbtn").on("click", function () {
+    $(document).on("click",".editbtn", function () {
         fillUserData(this);
     });
 
-    $(".editcompany").on("click", function () {
+    $(document).on("click", ".editcompany", function () {
         fillCompanyData(this);
     });
 
@@ -55,6 +55,9 @@ function deleteUser(e) {
             if (parseInt(idUser) == parseInt(data.id)) {
                 //update view
                 console.log('User has been deleted');
+                $(e).closest('tr').fadeOut(300, function () {
+                    $(this).remove();
+                });
             }
         },
         'json'
@@ -192,6 +195,7 @@ function addCompany() {
         function (data) {
             $("#myModal").modal('hide');
             if(data.message) alert(data.message);
+            setTimeout(function() { $.pjax.reload({container: '#pjaxupd'}); }, 1000);
         }, "json"
     );
 }
