@@ -218,7 +218,7 @@ function addCompany() {
         },
         function (data) {
             $("#myModal").modal('hide');
-            if(data.message) alert(data.message);
+            if(data.message) showError(data);
             setTimeout(function() { $.pjax.reload({container: '#pjaxupd'}); }, 1000);
         }, "json"
     );
