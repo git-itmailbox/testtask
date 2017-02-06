@@ -24,6 +24,11 @@ class CompaniesController extends Controller
             ->offset($pagination->offset)
             ->limit($pagination->limit)->asArray()
             ->all();
+	
+	foreach	($companies as &$company)
+	{
+		$company['quota'] /=pow(1024,4);
+	}
 
         return $this->render('index', [
             'companies' => new ArrayDataProvider([
@@ -46,7 +51,7 @@ class CompaniesController extends Controller
         echo json_encode(['data'=>$model->attributes, 'message'=>$message]);
         Yii::$app->end();
     }
-
+	
     public function actionDelete()
     {
         $id = $_POST['id'];
@@ -62,7 +67,17 @@ class CompaniesController extends Controller
         $model = Companies::findOne($id);
 
         $model->attributes = $_POST;
-        $model->save();
+	$model->quota *= pow(1024,4);
+	
+       if($model->validate()){
+ 		
+		        $model->save();
+	}
+	else{
+	
+        return $this->sendAjaxResponseError($model,$model->errors);
+	
+	}
         return $this->sendAjaxResponse($model);
 
     }
@@ -75,9 +90,9 @@ class CompaniesController extends Controller
 
         $model = new Companies;
         $model->attributes = $_POST;
-        if($model->quota<1000)
+        if(!($model->validate()))
         $model->quota *= pow(1024,4);
-        else $this->sendAjaxResponseError($model, "Quota must be between 1 and 1000 TB");
+        else $this->sendAjaxResponseError($model, $model->errors);
         $model->save();
         return $this->sendAjaxResponse($model);
 //
@@ -85,8 +100,9 @@ class CompaniesController extends Controller
     public function actionGetcompany()
     {
         $id = $_POST['id'];
-
-        return $this->sendAjaxResponse(Companies::findOne( $id ));
+	$model =Companies::findOne( $id );
+	$model->quota /= pow(1024,4);
+        return $this->sendAjaxResponse($model);
 
     }
 }
