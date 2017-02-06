@@ -103,7 +103,7 @@ function fillCompanyData(e) {
     var curRow = $(e).closest('tr');
     // var idCmp = $(curRow).data("id");
 
-	console.log(e);
+console.log(e);
     if (idCmp > 0) {
         isEdit.val(idCmp);
         $(".modal-title")[0].innerText = "Edit Company";
@@ -144,7 +144,7 @@ function editUser() {
             company_id: company.val(),
         },
         function (data) {
-	console.log(data);
+console.log(data);
             if ((parseInt(idUser) == parseInt(data.data.id)) && data.message === undefined) {
                 //update view
                 console.log('User has been updated');
