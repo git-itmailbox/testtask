@@ -11,19 +11,26 @@ $(document).ready(function () {
         }
     );
     $(document).on("click",".dltbtn", function () {
+	
         deleteUser(this);
         console.log('deleted');
-
+	return false;
     });
     $(document).on("click", ".dltCompanyBtn", function () {
+
         deleteCompany(this);
+	return false;
     });
     $(document).on("click",".editbtn", function () {
+	
         fillUserData(this);
+	return false;
     });
 
     $(document).on("click", ".editcompany", function () {
+
         fillCompanyData(this);
+	return false;
     });
 
 });
