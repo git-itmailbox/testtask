@@ -30,7 +30,7 @@ class Companies extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'quota'], 'required'],
-            [['quota'], 'integer'],
+            [['quota'], 'integer' , 'max' => 1000], //for example
             [['name'], 'string', 'max' => 100],
             [['name'], 'unique'],
         ];
@@ -44,7 +44,7 @@ class Companies extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'quota' => 'Quota',
+            'quota' => 'Quota (TB)',
         ];
     }
 
@@ -90,4 +90,17 @@ class Companies extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Users::className(), ['company_id' => 'id']);
     }
+
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+		$attr= $this->attributes;
+		$attr['quota'] *= pow(1024,4);
+		$this->attributes =$attr;
+		return true;
+		} else {
+		return false;
+		}
+	} 
+
 }
