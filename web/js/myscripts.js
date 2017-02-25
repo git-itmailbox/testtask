@@ -74,21 +74,13 @@ function deleteUser(e) {
 function fillUserData(e) {
     var isEdit = $("#isedit");
     var idUser = $(e).data("id");
+    //if hidden field contains id - its editing, so get info  for editing
     if (idUser > 0) {
         isEdit.val(idUser);
         $(".modal-title")[0].innerText = "Edit User";
-        var name = $("#name");
-        var email = $("#email");
-        var company = $("#company_id");
-        $.post("/users/getuser", {id: idUser}, function (data) {
-            data = data.data
-            console.log(data.data);
-            company.val(data['company_id']);
-            name.val(data['name']);
-            email.val(data['email']);
-
-        }, 'json');
+        loadUserInfo(idUser);
     }
+    //otherwise its new one, so we need to get empty form 
     else {
         isEdit.val(0);
         resetMyModal();
@@ -97,32 +89,46 @@ function fillUserData(e) {
     return;
 
 }
+
+function loadUserInfo(id){
+    var name = $("#name"),
+        email = $("#email"),
+        company = $("#company_id");
+    $.post("/users/getuser", {id: id}, function (data) {
+        data = data.data
+        console.log(data.data);
+        company.val(data['company_id']);
+        name.val(data['name']);
+        email.val(data['email']);
+
+    }, 'json');
+}
+
 function fillCompanyData(e) {
     var isEdit = $("#isedit");
     var idCmp = $(e).data("id");
-    var curRow = $(e).closest('tr');
-    // var idCmp = $(curRow).data("id");
-
-console.log(e);
     if (idCmp > 0) {
         isEdit.val(idCmp);
         $(".modal-title")[0].innerText = "Edit Company";
-        var name = $("#name");
-        var quota = $("#quota");
-        $.post("/companies/getcompany", {id: idCmp}, function (data) {
-            data = data.data
-            console.log(data.data);
-            name.val(data['name']);
-            quota.val(data['quota']);
-
-        }, 'json');
+        loadCompanyInfo(idCmp);
     }
     else {
         isEdit.val(0);
-        // resetMyModal();
+        resetMyModal();
         $(".modal-title")[0].innerText = "Add new Company";
     }
     return;
+}
+
+function loadCompanyInfo(id){
+    var name = $("#name");
+    var quota = $("#quota");
+    $.post("/companies/getcompany", {id: id}, function (data) {
+      data = data.data
+      console.log(data.data);
+      name.val(data['name']);
+      quota.val(data['quota']);
+    }, 'json');
 
 }
 
@@ -175,11 +181,15 @@ for(var key in data.message ){
 function resetMyModal() {
     const n = $("#name"),
         e = $("#email"),
+        q = $("#quota"),
+        isedit = $("#isedit"),
         c = $("#company_id");
 
     n.val("");
     e.val("");
     c.val("");
+    q.val("");
+    isedit.val("");
 }
 
 function addUser() {

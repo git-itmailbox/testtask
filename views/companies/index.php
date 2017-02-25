@@ -56,7 +56,7 @@ function editButton($key){
     ?>
     <?php Pjax::end() ?>
 
-    <a href="#" id="addBtn" class="btn btn-success" data-toggle = 'modal' data-target='#myModal'>add</a>
+    <a href="#" id="addBtn" class="btn btn-success editcompany" data-toggle = 'modal' data-target='#myModal'>add</a>
 
 </div>
 
